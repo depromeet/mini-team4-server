@@ -67,7 +67,7 @@ function insertWeatherData(src, dst) {
     }
 }
 
-module.exports = function(lat, lon) {
+module.exports = function(lat, lon, callback) {
     var key = wthServiceKey.localArea;
     var lastModifiedTime = moment().format();
     var dateArr = lastModifiedTime.split('T')[0].split('-');
@@ -80,7 +80,7 @@ module.exports = function(lat, lon) {
     console.log("date : ", date);
     console.log("time : ", time, " baseTime : ", baseTime(time));
 
-    child = exec("./findXYLocate.out 0 " + lon + " " + lat, function(error, stdout, stderr) {
+    child = exec(__dirname + "/findXYLocate.out 0 " + lon + " " + lat, function(error, stdout, stderr) {
         if (error !== null) {
             console.log('exec error: ' + error);
         }
@@ -118,7 +118,6 @@ module.exports = function(lat, lon) {
                 };
 
                 console.log('fcstTime : ', firstFcstTime, secondFcstTime, thirdFcstTime);
-                console.log(_data);
                 for(var i = 0; i < _data.length; i++) {
                     if(Number(_data[i].fcstTime) === firstFcstTime) {
                         insertWeatherData(_data[i], firstForecastObj)
@@ -128,9 +127,18 @@ module.exports = function(lat, lon) {
                         insertWeatherData(_data[i], thirdForecastObj)
                     }
                 }
-                console.log("예측 값: ", firstForecastObj, secondForecastObj, thirdForecastObj)
+                console.log("예측 값: ", firstForecastObj, secondForecastObj, thirdForecastObj);
+                var data = {
+                    success: 1,
+                    data: [firstForecastObj, secondForecastObj, thirdForecastObj]
+                };
+
+                callback(data)
             } else {
                 console.log(body);
+                callback({
+                    success: 0
+                })
             }
         });
     })
