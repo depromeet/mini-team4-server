@@ -60,3 +60,5 @@ typings/
 # webstrom
 .idea/
 package-lock.json
+
+localtest/
