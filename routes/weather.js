@@ -24,30 +24,60 @@ var headers  = {
 };
 
 var currentWeatherUrl = "https://api2.sktelecom.com/weather/current/minutely";
+var tomorrowWeatherUrl = "https://api2.sktelecom.com/weather/forecast/3days"
+var weeklyWeatherUrl = "https://api2.sktelecom.com/weather/forecast/6days";
 
 function createUrl(query, lat, lon) {
-  return currentWeatherUrl + "?version=1&lat=" + lat + "&lon=" + lon;
+  switch (query) {
+    case 'today':
+      return currentWeatherUrl + "?version=1&lat=" + lat + "&lon=" + lon;
+    case 'tomorrow':
+      return tomorrowWeatherUrl + "?version=1&lat=" + lat + "&lon=" + lon;
+    case 'weekly':
+      return weeklyWeatherUrl + "?version=1&lat=" + lat + "&lon=" + lon;
+    default:
+      return currentWeatherUrl + "?version=1&lat=" + lat + "&lon=" + lon;
+  }
+}
+function parseCurrentWeather(data) {
+
 }
 
-function getCurrentWeather(req, _res, next) {
-  var requestUrl = createUrl(req.query.lat, req.query.lon);
-  console.log(`my url is ${requestUrl}`);
+function parseTomorrowWeather(data) {
+
+}
+
+function parseWeeklyWeather(data) {
+
+}
+
+var requestUrl;
+function getWeather(req, response, next, callback) {
   request({
     'headers':headers,
     'uri': requestUrl,
     'method': 'get'
   }, function(err, res, body) {
     if (err) 
-      _res.send("Error");
-    _res.send(body);
+      response.send("Error");
+    response.send(callback(JSON.parse(body)));
   });
 }
 
-function getTomorrowWeather(req, res, next) {
+function getCurrentWeather(req, res, next) {
+  requestUrl = createUrl('today', req.query.lat, req.query.lon);
+  getWeather(req, res, next, parseCurrentWeather);
 
 }
 
-function getWeeklyWeather(req, res, next) {
+function getTomorrowWeather(req, res, next) {
+  requestUrl = createUrl('tomorrow', req.query.lat, req.query.lon);
+  getWeather(req, res, next, parseTomorrowWeather);
+  
+}
 
+function getWeeklyWeather(req, res, next) {
+  requestUrl = createUrl('weekly', req.query.lat, req.query.lon);
+  getWeather(req, res, next, parseWeeklyWeather);
 }
 module.exports = router;
