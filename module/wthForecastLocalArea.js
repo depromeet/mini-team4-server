@@ -129,7 +129,7 @@ module.exports = function(lat, lon, callback) {
                 }
                 console.log("예측 값: ", firstForecastObj, secondForecastObj, thirdForecastObj);
                 var data = {
-                    success: 1,
+                    success: true,
                     data: [firstForecastObj, secondForecastObj, thirdForecastObj]
                 };
 
@@ -137,7 +137,7 @@ module.exports = function(lat, lon, callback) {
             } else {
                 console.log(body);
                 callback({
-                    success: 0
+                    success: false
                 })
             }
         });
