@@ -7,6 +7,31 @@ var wthServiceKey = require("../config/wthServiceKey");
 var exec = require('child_process').exec,
     child;
 
+function baseTime(time) {
+    var result = 0;
+
+    if (time < 210)
+        result = 2300;
+    else if (time < 510)
+        result = 200;
+    else if (time < 810)
+        result = 500;
+    else if (time < 1110)
+        result = 800;
+    else if (time < 1410)
+        result = 1100;
+    else if(time < 1710)
+        result = 1400;
+    else if(time < 2010)
+        result = 1700;
+    else if(time < 2310)
+        result = 2000;
+    else
+        result = 2300;
+
+    return result;
+}
+
 function translateSKY(src, dst) {
     if(src.fcstValue === 1) dst.SKY = "맑음";
     else if(src.fcstValue === 2) dst.SKY = "구름 조금";
@@ -53,9 +78,9 @@ module.exports = function(lat, lon) {
 
     console.log("Full time : ", lastModifiedTime);
     console.log("date : ", date);
-    console.log("time : ", time);
+    console.log("time : ", time, " baseTime : ", baseTime(time));
 
-    child = exec("../findXYLocate.out 0 " + lon + " " + lat, function(error, stdout, stderr) {
+    child = exec(__dirname, "../findXYLocate.out 0 " + lon + " " + lat, function(error, stdout, stderr) {
         if (error !== null) {
             console.log('exec error: ' + error);
         }
@@ -66,9 +91,9 @@ module.exports = function(lat, lon) {
         var GETuri = 'http://newsky2.kma.go.kr/service/SecndSrtpdFrcstInfoService2/ForecastSpaceData?';
         GETuri += 'ServiceKey=' + key;
         GETuri += '&base_date=' + date;
-        GETuri += '&base_time=' + time;
-        GETuri += '&nx=' + nx;
-        GETuri += '&ny=' + ny;
+        GETuri += '&base_time=' + baseTime(time);
+        GETuri += '&nx=' + 43;
+        GETuri += '&ny=' + 590;
         GETuri += '&numOfRows=50';
         GETuri += '&pageNo=1';
         GETuri += '&_type=json';
@@ -93,6 +118,7 @@ module.exports = function(lat, lon) {
                 };
 
                 console.log('fcstTime : ', firstFcstTime, secondFcstTime, thirdFcstTime);
+                console.log(_data);
                 for(var i = 0; i < _data.length; i++) {
                     if(Number(_data[i].fcstTime) === firstFcstTime) {
                         insertWeatherData(_data[i], firstForecastObj)
