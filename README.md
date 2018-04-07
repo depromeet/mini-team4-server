@@ -1,2 +1,31 @@
-# mini-team4-server
-This repository is to manage server source code using NodeJS. This also implements APIs for clients.
+# 날씨 정보 반환 서버
+본 서버 프로그램은 `NodeJS` + `express`로 구현 하였으며, 클라이언트로부터 위치 정보를 전달 받아서 해당 위치의 날씨를 반환해주는 API 서버를 구현하고 있다. 
+
+서버는 2가지 파트로 나뉘어져 있다. 
+
+1. 클라이언트로부터 요청을 받아들이고 결과를 전송하는 `router` 파트
+2. `router`를 통해 들어온 API 요청을 파싱하고, 실제 오픈 API를 통해 날씨 정보를 얻어와 가공 하는 파트
+
+
+
+## 설치 방법
+
+`git clone` 이나 다운로드를 통해 본 리포지토리를 다운로드 받는다. 
+
+다운 받은 폴더로 이동 후 `npm install`을 통해 의존선 패키지 설치를 진행한다.
+
+`bin/www` 실행을 통해 서버를 실행한다. 
+
+
+
+## 클라이언트 사이드 API 사용방법
+
+- [클라이언트 사이드 API 가이드](./docs/클라이언트 사이드 API.md)
+- [클라이언트 사이드 응답 포맷](./docs/response.md)
+
+
+
+## 서버 개발자를 위한 참고 문서
+
+- [공공 데이터 포털 동네 예보 정보 조회 서비스](./docs/OpenAPI_사용자-활용가이드_기상청_신규 동네예보정보조회서비스_v1.4.pdf)
+- [공공 데이터 포털 중기 예보 정보 조회 서비스](./docs/OpenAPI_사용자_활용가이드_기상청_중기예보정보조회서비스_v1.4.pdf)
