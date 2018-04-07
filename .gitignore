@@ -59,3 +59,4 @@ typings/
 
 # webstrom
 .idea/
+package-lock.json
