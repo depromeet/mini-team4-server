@@ -80,7 +80,7 @@ module.exports = function(lat, lon) {
     console.log("date : ", date);
     console.log("time : ", time, " baseTime : ", baseTime(time));
 
-    child = exec(__dirname, "../findXYLocate.out 0 " + lon + " " + lat, function(error, stdout, stderr) {
+    child = exec("./findXYLocate.out 0 " + lon + " " + lat, function(error, stdout, stderr) {
         if (error !== null) {
             console.log('exec error: ' + error);
         }
