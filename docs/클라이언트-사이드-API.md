@@ -31,8 +31,8 @@
 
 각 API에 대한 JSON 데이터는 아래의 링크를 참조하길 바란다.
 
-- [오늘 날씨](./response.md#오늘-날씨-JSON-응답-및-내일-날씨-JSON-응답)
-- [내일  날씨](./response.md#오늘-날씨-JSON-응답-및-내일-날씨-JSON-응답)
+- [오늘 날씨](./response.md#오늘-날씨-JSON-응답)
+- [내일  날씨](./response.md#내일-날씨-JSON-응답)
 - [주간 날씨](./response.md#주간-날씨-JSON-응답)
 
 

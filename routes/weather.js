@@ -32,23 +32,57 @@ function createUrl(query, lat, lon) {
     case 'today':
       return currentWeatherUrl + "?version=1&lat=" + lat + "&lon=" + lon;
     case 'tomorrow':
-      return tomorrowWeatherUrl + "?version=1&lat=" + lat + "&lon=" + lon;
     case 'weekly':
       return weeklyWeatherUrl + "?version=1&lat=" + lat + "&lon=" + lon;
     default:
       return currentWeatherUrl + "?version=1&lat=" + lat + "&lon=" + lon;
   }
 }
-function parseCurrentWeather(data) {
 
+function getRainInfo(rain) {
+  switch(rain) {
+    case "0":
+      return '비안옴';
+    case "1":
+      return '비';
+    case "2":
+      return '비/눈';
+    case "3":
+      return '눈';
+    default:
+      return "강수정보 알수없음";
+  }
+}
+function parseCurrentWeather(data) {
+  var response = {};
+  var forecast = data.weather.minutely[0];
+  response.wind = forecast.wind.wspd;
+  response.sky = forecast.sky.name;
+  response.rain = getRainInfo(forecast.precipitation.type);
+  response.c_current = forecast.temperature.tc;
+  response.c_high = forecast.temperature.tmax;
+  response.c_low = forecast.temperature.tmin;
+  response.humidity = forecast.humidity;
+  return JSON.stringify(response);
 }
 
 function parseTomorrowWeather(data) {
-
+  var response = {};
+  response.forecast = JSON.parse(parseWeeklyWeather(data)).forecast[0];
+  return JSON.stringify(response);
 }
 
 function parseWeeklyWeather(data) {
-
+  var response = {'forecast':[]};
+  var forecast = data.weather.forecast6days[0];
+  for (i = 0 ;i < 6;i++) {
+    response.forecast.push({
+      'c_high': forecast.temperature['tmax' + (i + 2) + 'day'],
+      'c_low': forecast.temperature['tmin' + (i + 2) + 'day'],
+      'sky': forecast.sky['amName' + (i + 2) + 'day']
+    })
+  }
+  return JSON.stringify(response);
 }
 
 var requestUrl;
