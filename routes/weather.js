@@ -99,14 +99,17 @@ function parseCurrentWeather(data) {
 
 function parseTomorrowWeather(data) {
   var response = {};
-  response.forecast = JSON.parse(parseWeeklyWeather(data)).forecast[0];
+  var weeklyData = parseWeeklyWeather(data);
+  response.forecast = JSON.parse(weeklyData).forecast[0];
   return JSON.stringify(response);
 }
 
 function parseWeeklyWeather(data) {
   var response = {'forecast':[]};
-  if (!data.weather || !data.weather.minutely)
+
+  if (!data.weather || !data.weather.forecast6days)
     return "Bad Request";
+
   var forecast = data.weather.forecast6days[0];
   for (i = 0 ;i < 6;i++) {
     response.forecast.push({
