@@ -132,13 +132,12 @@ module.exports = function(lat, lon, callback) {
                     success: true,
                     data: [firstForecastObj, secondForecastObj, thirdForecastObj]
                 };
-
-                callback(data)
             } else {
-                console.log(body);
-                callback({
-                    success: false
-                })
+                console.log(body)
+                data = {success: false}
+            }
+            if (callback != null) {
+                callback(data)
             }
         });
     })
