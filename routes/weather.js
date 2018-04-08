@@ -45,22 +45,23 @@ function classifyAndGetData(req, res, next, index = 3) {
       res.send({success:404, message: "Bad request: undefined routes"});
       return;
     }
-    weather(req.query.lat, req.query.lon, weatherMethod[index]);
+    var data = weather(req.query.lat, req.query.lon);
+    weatherMethod[index](res, data);
   } else {
     res.send({success:401, message: "필수 파라미터가 존재하지 않습니다."});
   }
 }
 
-function sendCurrentWeather(data) {
+function sendCurrentWeather(res, data) {
   console.log(data)
   res.send({success:401, message:"current chat 파라미터가 잘못 되었습니다."});
 }
 
-function sendTomorrowWeather(data) {
+function sendTomorrowWeather(res, data) {
   res.send({success:401, message:"tomorrow chat 파라미터가 잘못 되었습니다."});
 }
 
-function sendWeeklyWeather(data) {
+function sendWeeklyWeather(res, data) {
   res.send({success:401, message:"weekly chat 파라미터가 잘못 되었습니다."});
 }
 module.exports = router;
