@@ -66,3 +66,4 @@ localtest/
 .firebaserc
 firebase.json
 functions/
+config/

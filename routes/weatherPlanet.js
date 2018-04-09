@@ -8,7 +8,7 @@ var myKey = require('../localtest/weatherKey')();
 
 /* GET weathers listing. */
 router.get('/', function(req, res, next) {
-  res.send("<a href='https://github.com/depromeet/mini-team4-server'>Refer to a github</a>")
+  res.send("<a href='https://github.com/depromeet/mini-team4-server'>Refer to a github</a>");
 } );
 
 router.get('/chatbot',  function (req, res, next) {
@@ -26,13 +26,13 @@ router.get('/chatbot',  function (req, res, next) {
     default:
       res.send("Bad request");
   }
-})
+});
 
 router.get('/forecast/today', getCurrentWeather);
 
 router.get('/forecast/tomorrow', getTomorrowWeather);
 
-router.get('/forecast/weekly', getWeeklyWeather);;
+router.get('/forecast/weekly', getWeeklyWeather);
 
 var headers  = {
   'Accept': "application/json",
@@ -41,7 +41,7 @@ var headers  = {
 };
 
 var currentWeatherUrl = "https://api2.sktelecom.com/weather/current/minutely";
-var tomorrowWeatherUrl = "https://api2.sktelecom.com/weather/forecast/3days"
+var tomorrowWeatherUrl = "https://api2.sktelecom.com/weather/forecast/3days";
 var weeklyWeatherUrl = "https://api2.sktelecom.com/weather/forecast/6days";
 
 function createUrl(query, lat, lon) {
@@ -116,7 +116,7 @@ function parseWeeklyWeather(data) {
       'c_high': forecast.temperature['tmax' + (i + 2) + 'day'],
       'c_low': forecast.temperature['tmin' + (i + 2) + 'day'],
       'sky': forecast.sky['amName' + (i + 2) + 'day']
-    })
+    });
   }
   return JSON.stringify(response);
 }

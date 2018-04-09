@@ -4,9 +4,6 @@ var moment = require('moment');
 // weather config
 var wthServiceKey = require("../config/wthServiceKey");
 
-var exec = require('child_process').exec,
-    child;
-
 function baseTime(time) {
     var result = 0;
 
@@ -36,20 +33,20 @@ function translateSKY(src, dst) {
     if(src.fcstValue === 1) dst.SKY = "맑음";
     else if(src.fcstValue === 2) dst.SKY = "구름 조금";
     else if(src.fcstValue === 3) dst.SKY = "구름 많음";
-    else dst.SKY = "흐림"
+    else dst.SKY = "흐림";
 }
 function translatePTY(src, dst) {
     if(src.fcstValue === 0) dst.PTY = "없음";
     else if(src.fcstValue === 1) dst.PTY = "비";
     else if(src.fcstValue === 2) dst.PTY = "비/눈";
-    else dst.fcstValue = "눈"
+    else dst.fcstValue = "눈";
 }
 function translateWSD(src, dst) {
     var val = Number(src.fcstValue);
     if(val < 4) dst.WSD = "바람 없음";
     else if(val < 9) dst.WSD = "거의 조금";
     else if(val === 3) dst.WSD = "조금 있음";
-    else dst.WSD = "매우 강함"
+    else dst.WSD = "매우 강함";
 }
 
 
@@ -101,6 +98,7 @@ module.exports = function(lat, lon, callback) {
             url: GETuri,
             method: 'GET',
         };
+        var data ={};
         request(options, function(error, response, body) {
             if (response.statusCode == 200) {
                 var _data = (JSON.parse(body).response.body.items.item);
@@ -120,25 +118,23 @@ module.exports = function(lat, lon, callback) {
                 console.log('fcstTime : ', firstFcstTime, secondFcstTime, thirdFcstTime);
                 for(var i = 0; i < _data.length; i++) {
                     if(Number(_data[i].fcstTime) === firstFcstTime) {
-                        insertWeatherData(_data[i], firstForecastObj)
+                        insertWeatherData(_data[i], firstForecastObj);
                     } else if(Number(_data[i].fcstTime) === secondFcstTime) {
-                        insertWeatherData(_data[i], secondForecastObj)
+                        insertWeatherData(_data[i], secondForecastObj);
                     } else if(Number(_data[i].fcstTime) === thirdFcstTime) {
-                        insertWeatherData(_data[i], thirdForecastObj)
+                        insertWeatherData(_data[i], thirdForecastObj);
                     }
                 }
                 console.log("예측 값: ", firstForecastObj, secondForecastObj, thirdForecastObj);
-                var data = {
+                data = {
                     success: true,
                     data: [firstForecastObj, secondForecastObj, thirdForecastObj]
                 };
             } else {
-                console.log(body)
-                data = {success: false}
+                console.log(body);
+                data = {success: false};
             }
-            if (callback != null) {
-                callback(data)
-            }
+            return data;
         });
-    })
+    });
 };
